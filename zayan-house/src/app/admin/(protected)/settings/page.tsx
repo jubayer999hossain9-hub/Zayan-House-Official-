@@ -12,6 +12,14 @@ export default async function AdminSettings() {
   return (
     <div>
       <PageHeader title="Settings" subtitle="Changes appear on the website straight away." />
+      <div className="mb-6">
+        <SettingsForm group="banner" title="Homepage top banner" description="The big picture at the very top of the homepage. Leave the photo empty to use the built-in Zayan House showcase picture. Untick the box to show the 3-slide slider instead." values={s.banner}
+          fields={[
+            { name: "enabled", label: "Show the banner picture (untick to use the slider)", kind: "checkbox" },
+            { name: "imageUrl", label: "Banner picture (optional)", kind: "image", hint: "Use a wide picture, ratio 3:2 (for example 1536 x 1024). It is shown in full, so keep important parts away from the edges." },
+            { name: "alt", label: "Picture description (for Google and screen readers)" },
+          ]} />
+      </div>
       <div className="mb-6 grid gap-6 lg:grid-cols-2">
         <SettingsForm group="promo" title="Homepage offer banner" description="The green banner next to New Arrivals on the homepage. Only write an offer (for example a discount) that is really available." values={s.promo}
           fields={[{ name: "enabled", label: "Show this banner", kind: "checkbox" }, { name: "eyebrow", label: "Small heading" }, { name: "title", label: "Big heading" }, { name: "text", label: "Short text" }, { name: "button", label: "Button text" }, { name: "link", label: "Button link", hint: "Start with / for a page in your shop, e.g. /category/saree, or use a full https:// link." }]} />

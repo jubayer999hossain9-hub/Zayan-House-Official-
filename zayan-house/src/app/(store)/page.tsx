@@ -11,6 +11,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { HeroSlider, type HeroSlide } from "@/components/hero-slider";
 import { ArchScene } from "@/components/arch-scene";
+import { HeroBanner } from "@/components/hero-banner";
 import { CategoryCard, CollectionTile } from "@/components/category-card";
 
 export const dynamic = "force-dynamic";
@@ -70,7 +71,17 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }} />
 
-      <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
+      {settings.banner.enabled ? (
+        <HeroBanner
+          imageUrl={settings.banner.imageUrl}
+          alt={settings.banner.alt || settings.general.siteName}
+          heading={`${settings.general.siteName}: ${settings.general.tagline}`}
+          buttonLabel={settings.hero.s1Button}
+          buttonLink={settings.hero.s1Link}
+        />
+      ) : (
+        <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
+      )}
 
       {categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">

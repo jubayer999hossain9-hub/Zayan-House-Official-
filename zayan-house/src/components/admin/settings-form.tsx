@@ -4,8 +4,9 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { saveSettings } from "@/app/actions/admin-site";
 import { useFormAction } from "@/lib/use-form-action";
+import { ImageField } from "./image-field";
 
-export type SettingField = { name: string; label: string; kind?: "text" | "textarea" | "checkbox" | "number"; hint?: string; rows?: number };
+export type SettingField = { name: string; label: string; kind?: "text" | "textarea" | "checkbox" | "number" | "image"; hint?: string; rows?: number };
 
 export function SettingsForm({ group, title, description, fields, values }: {
   group: string; title: string; description?: string; fields: SettingField[]; values: Record<string, string | number | boolean>;
@@ -23,6 +24,9 @@ export function SettingsForm({ group, title, description, fields, values }: {
       {fields.map((f) => {
         const err = state.fieldErrors?.[f.name];
         const id = `s-${group}-${f.name}`;
+        if (f.kind === "image") {
+          return <ImageField key={f.name} name={f.name} label={f.label} initial={String(values[f.name] ?? "")} error={err} hint={f.hint} />;
+        }
         if (f.kind === "checkbox") {
           return <label key={f.name} className="flex items-center gap-2 text-sm"><input type="checkbox" name={f.name} defaultChecked={Boolean(values[f.name])} /> {f.label}</label>;
         }

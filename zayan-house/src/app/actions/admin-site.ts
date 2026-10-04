@@ -40,6 +40,11 @@ const GROUPS = {
   social: z.object({ facebook: urlOrEmpty, instagram: urlOrEmpty }),
   payment: z.object({ codEnabled: z.boolean(), codInstructions: emptyToNull(300) }),
   orders: z.object({ orderPrefix: z.string().trim().toUpperCase().regex(/^[A-Z0-9]{2,6}$/, "Use 2 to 6 letters or numbers") }),
+  banner: z.object({
+    enabled: z.boolean(),
+    imageUrl: z.string().trim().max(500).refine((v) => v === "" || /^\/media\/\d+$/.test(v) || /^https:\/\/[^\s]+$/.test(v), "Use an uploaded image or an https:// link"),
+    alt: z.string().trim().max(160),
+  }),
   hero: z.object(heroShape),
   promo: z.object({
     enabled: z.boolean(), eyebrow: z.string().trim().max(60), title: z.string().trim().max(80),

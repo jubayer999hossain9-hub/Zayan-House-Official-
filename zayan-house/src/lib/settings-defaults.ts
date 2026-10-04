@@ -29,6 +29,11 @@ export const SETTING_DEFAULTS = {
   inventory: {
     lowStockThreshold: 5,
   },
+  banner: {
+    enabled: true,
+    imageUrl: "",
+    alt: "Zayan House: premium products, better living. Style for every moment.",
+  },
   hero: {
     s1Eyebrow: "Premium Women's Fashion",
     s1Title: "Elegance in Every",

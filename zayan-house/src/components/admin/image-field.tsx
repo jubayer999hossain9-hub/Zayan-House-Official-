@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ProductImage } from "@/components/product-image";
 
 /** A text field that also lets the admin upload a photo; the field holds the resulting link. */
-export function ImageField({ name, label, initial, error }: { name: string; label: string; initial: string; error?: string }) {
+export function ImageField({ name, label, initial, error, hint }: { name: string; label: string; initial: string; error?: string; hint?: string }) {
   const [value, setValue] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
@@ -45,7 +45,7 @@ export function ImageField({ name, label, initial, error }: { name: string; labe
       </div>
       {msg && <p role="alert" className="field-error">{msg}</p>}
       {error && <p className="field-error">{error}</p>}
-      <p className="mt-1 text-xs text-muted">Shown on the homepage category cards. Wide photos (4:3) look best. Without a photo, a decorative card is used.</p>
+      <p className="mt-1 text-xs text-muted">{hint ?? "Shown on the homepage category cards. Wide photos (4:3) look best. Without a photo, a decorative card is used."}</p>
     </div>
   );
 }

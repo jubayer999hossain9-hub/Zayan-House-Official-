@@ -4,7 +4,7 @@ A complete online shop built from scratch with Next.js, TypeScript, Tailwind CSS
 
 **What it includes**
 
-- Customer website: premium homepage with hero slider, shop with search / filters / sorting, product pages with working size and colour options, cart, checkout (Cash on Delivery), coupons, delivery charges, order confirmation, customer accounts (orders, addresses, profile)
+- Customer website: premium homepage with a showcase banner picture (or a hero slider), shop with search / filters / sorting, product pages with working size and colour options, cart, checkout (Cash on Delivery), coupons, delivery charges, order confirmation, customer accounts (orders, addresses, profile)
 - Admin panel: dashboard, products (variants, photo upload), categories, orders, customers, inventory, coupons, delivery, website pages, settings
 - SEO: page titles and descriptions, sitemap, robots.txt, product and shop structured data
 - Security: hashed passwords, signed sessions, server-side price / stock / coupon / delivery checks, rate limiting
@@ -22,10 +22,36 @@ Use this to continue exactly where you stopped. Tick off what you have already d
 - [x] Step 5: `npm run db:migrate` and `npm run db:seed` done (and optionally `npm run db:seed:demo`)
 - [x] Step 6: Admin account created with `npm run admin:create`
 - [x] Step 7: Website running with `npm run dev`
-- [ ] **Step 7b (do this now): apply the new design update, see "Updating your running copy" below**
+- [x] Step 7b: new design (version 2) applied, and the website is live on Vercel
+- [ ] **Step 7c (do this now): apply version 3 (homepage banner picture), see "Version 3" below**
 - [ ] Step 8: Set up the shop from the admin panel (section 7 below): Settings, Delivery, Pages, Categories, Products, Coupons
 - [ ] Step 9: Place a test order and manage it in Admin > Orders
 - [ ] Step 10: Pre-launch checklist, then go live (section 9)
+
+## Version 3: homepage banner picture (newest)
+
+The top of the homepage now shows the **Zayan House showcase picture** (logo, "Style for Every Moment", products and the category icon row), with *Explore Collections* and *Shop Now* buttons under it. The picture is built in (`public/hero/`). The old 3-slide slider is still available as an option.
+
+**Change it from the admin:** Admin > Settings > **Homepage top banner**
+- Untick *Show the banner picture* to use the 3-slide slider instead.
+- Upload your own picture to replace the built-in one (wide 3:2 ratio, for example 1536 x 1024; it is shown in full, so keep important parts away from the edges). Clear the box to go back to the built-in picture.
+
+**No database change is needed for version 3.** Do not run any seed or reset command.
+
+### Updating the LIVE website on Vercel (version 3)
+
+1. Extract the new ZIP.
+2. In your GitHub repository for the project, upload the new files over the old ones (GitHub > your repository > *Add file* > *Upload files*, drag in the contents of the extracted folder, keep the same folder structure, then *Commit changes*). **Do not upload a `.env` file.** The ZIP does not contain one.
+3. Vercel starts a new deployment automatically. Wait until it shows *Ready*, then open your website and press `Ctrl + F5`.
+4. Your products, orders, customers and admin login are in the database, so they stay exactly as they are.
+
+If you use Git on your computer instead, replace the files, then run `git add .`, `git commit -m "Version 3 banner"` and `git push`.
+
+### Updating your local copy (version 3)
+
+Stop the website (`Ctrl + C`), copy the new files over your project folder (keep your `.env`), then run `npm install`, `npm run db:migrate` and `npm run dev`.
+
+---
 
 ## Updating your running copy to the new design (version 2)
 
