@@ -1,0 +1,115 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/700.css";
+@import "@fontsource/cormorant-garamond/500-italic.css";
+@import "@fontsource/cormorant-garamond/600-italic.css";
+
+@theme {
+  --color-green: #0f3d35;
+  --color-green-dark: #0a2b25;
+  --color-green-light: #17584d;
+  --color-ivory: #f8f5ee;
+  --color-cream: #fcfaf5;
+  --color-sand: #efe6d3;
+  --color-gold: #c8a96b;
+  --color-gold-dark: #a98a4d;
+  --color-gold-light: #e6d3a3;
+  --color-charcoal: #17201e;
+  --color-muted: #6f746f;
+  --color-line: #e6dfd0;
+  --color-danger: #a33a3a;
+  --color-success: #2e7d4f;
+
+  --font-serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --shadow-soft: 0 8px 30px rgba(15, 61, 53, 0.09);
+  --shadow-card: 0 2px 14px rgba(15, 61, 53, 0.07);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(180deg, var(--color-ivory) 0%, #faf6ec 100%);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  line-height: 1.12;
+}
+
+.accent-italic {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-gold-dark);
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-green-dark);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-dark);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.animate-float { animation: float-slow 7s ease-in-out infinite; }
+
+/* Soft rounded cards everywhere (every bordered cream panel) */
+@layer base {
+  [class*="border-line"][class*="bg-cream"] { border-radius: 16px; }
+  [class*="border-line"][class*="bg-ivory"] { border-radius: 12px; }
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@layer components {
+/* Buttons: pill shaped */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  padding: 0.8rem 1.75rem; font-size: 0.78rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; border-radius: 999px;
+  transition: background-color .25s, color .25s, border-color .25s, box-shadow .25s, transform .25s; cursor: pointer;
+}
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+.btn-primary { background: var(--color-green); color: var(--color-cream); }
+.btn-primary:hover:not(:disabled) { background: var(--color-green-dark); box-shadow: 0 6px 18px rgba(15, 61, 53, .25); }
+.btn-gold { background: var(--color-gold); color: var(--color-green-dark); }
+.btn-gold:hover:not(:disabled) { background: var(--color-gold-dark); color: #fff; }
+.btn-outline { border: 1px solid var(--color-green); color: var(--color-green); background: transparent; }
+.btn-outline:hover:not(:disabled) { background: var(--color-green); color: var(--color-cream); }
+.btn-light { background: var(--color-cream); color: var(--color-green); }
+.btn-light:hover:not(:disabled) { background: var(--color-gold-light); }
+
+.field { display: block; width: 100%; padding: 0.75rem 0.95rem; background: var(--color-cream);
+  border: 1px solid var(--color-line); border-radius: 10px; font-size: 0.95rem; color: var(--color-charcoal); }
+.field:focus { outline: none; border-color: var(--color-green); box-shadow: 0 0 0 3px rgba(15,61,53,.12); }
+.field[aria-invalid="true"] { border-color: var(--color-danger); }
+.label { display: block; margin-bottom: 0.35rem; font-size: 0.8rem; font-weight: 600; color: var(--color-charcoal); }
+.field-error { margin-top: 0.3rem; font-size: 0.78rem; color: var(--color-danger); }
+}
