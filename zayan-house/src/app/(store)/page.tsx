@@ -36,7 +36,7 @@ export default async function HomePage() {
   const slides: HeroSlide[] = ([
     { eyebrow: h.s1Eyebrow, title: h.s1Title, accent: h.s1Accent, text: h.s1Text, button: h.s1Button, link: h.s1Link },
     { eyebrow: h.s2Eyebrow, title: h.s2Title, accent: h.s2Accent, text: h.s2Text, button: h.s2Button, link: h.s2Link },
-    { eyebrow: h.s3Eyebrow, title: h.s3Title, accent: h.s3Accent, text: h.s3Accent, text: h.s3Text, button: h.s3Button, link: h.s3Link },
+    { eyebrow: h.s3Eyebrow, title: h.s3Title, accent: h.s3Accent, text: h.s3Text, button: h.s3Button, link: h.s3Link },
   ] as HeroSlide[]).filter((s) => s.title.trim() !== "").map((s) => ({ ...s, link: s.link || "/shop", button: s.button || "Shop Now" }));
 
   const collections = categories
@@ -75,7 +75,7 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }} />
 
-      {/* প্রিমিয়াম লুকের জন্য টপ ব্যানার এবং ৩-স্লাইডের স্লাইডার একসাথে সক্রিয় করা হলো */}
+      {/* টপ ব্যানার এবং স্লাইডার একসাথে */}
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 space-y-6">
         {settings.banner.enabled && (
           <HeroBanner
@@ -89,7 +89,7 @@ export default async function HomePage() {
         <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
       </section>
       
-      {/* ব্যানারের পরের ভিডিও স্লট */}
+      {/* ভিডিও স্লট */}
       <HomeVideoSlot position="after_banner" />
 
       {categories.length > 0 && (
