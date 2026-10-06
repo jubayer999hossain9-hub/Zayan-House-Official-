@@ -13,22 +13,27 @@ const NAV = [
   { label: "Coupons", href: "/admin/coupons" },
   { label: "Delivery", href: "/admin/delivery" },
   { label: "Pages", href: "/admin/pages" },
-  { label: "Home Settings", href: "/admin/home" }, // নতুন পেজের লিংক এখানে যুক্ত করা হয়েছে
+  { label: "Home Settings", href: "/admin/home" },
   { label: "Settings", href: "/admin/settings" },
 ];
 
-export function AdminNav() {
+export function AdminNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
-    <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-3 pb-3 lg:block lg:space-y-1 lg:pb-0">
+    <nav aria-label="Admin" className="space-y-1 px-3 pb-4 lg:pb-6">
       {NAV.map((item) => {
         const active = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
         return (
           <Link
             key={item.href}
             href={item.href}
+            onClick={onNavigate}
             aria-current={active ? "page" : undefined}
-            className={`block whitespace-nowrap rounded-sm px-3 py-2 text-sm ${active ? "bg-gold text-green-dark font-semibold" : "hover:bg-green-dark"}`}
+            className={`block rounded-lg px-4 py-2.5 text-sm transition ${
+              active
+                ? "bg-gold font-semibold text-green-dark shadow-soft"
+                : "text-cream/90 hover:bg-green-dark hover:text-cream"
+            }`}
           >
             {item.label}
           </Link>
