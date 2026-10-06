@@ -14,8 +14,6 @@ import { ArchScene } from "@/components/arch-scene";
 import { HeroBanner } from "@/components/hero-banner";
 import { CategoryCard, CollectionTile } from "@/components/category-card";
 
-// ব্যানার ও ভিডিও কম্পোনেন্ট ইম্পোর্ট করা হলো
-import { HomeBanners } from "@/components/home/HomeBanners";
 import { HomeVideoSlot } from "@/components/home/HomeVideoSlot";
 
 export const dynamic = "force-dynamic";
@@ -75,7 +73,6 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }} />
 
-      {/* টপ ব্যানার এবং স্লাইডার একসাথে */}
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 space-y-6">
         {settings.banner.enabled && (
           <HeroBanner
@@ -86,10 +83,11 @@ export default async function HomePage() {
             buttonLink={settings.hero.s1Link}
           />
         )}
-        <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
+        {slides.length > 0 && (
+          <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
+        )}
       </section>
-      
-      {/* ভিডিও স্লট */}
+
       <HomeVideoSlot position="after_banner" />
 
       {categories.length > 0 && (
@@ -155,7 +153,6 @@ export default async function HomePage() {
       )}
       <HomeVideoSlot position="after_best_sellers" />
 
-      {/* Brand story */}
       <section className="mx-auto mt-16 max-w-7xl px-4 sm:px-6">
         <div className="relative overflow-hidden rounded-3xl bg-green px-6 py-14 text-center text-cream sm:px-12 sm:py-16">
           <div className="pointer-events-none absolute -left-10 -top-10 h-48 w-48 rounded-full bg-gold/10" aria-hidden />
@@ -185,7 +182,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Newsletter */}
       <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
         <div className="rounded-3xl bg-sand px-6 py-12 text-center">
           <h2 className="text-3xl text-green sm:text-4xl">Join the Zayan House list</h2>

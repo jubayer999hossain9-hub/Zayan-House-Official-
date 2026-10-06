@@ -1,3 +1,5 @@
+const LOGO_SRC = "/logo.png";
+
 /**
  * Decorative brand illustration (pure SVG, no photos needed): a deep-green arch with the Zayan mark,
  * a marble podium, folded cloth, a shopping bag, gold spheres and leaves.
@@ -70,7 +72,7 @@ export function ArchScene({ variant = "hero", className = "" }: { variant?: "her
       <circle cx="380" cy="205" r="62" fill="#fcfaf5" />
       <circle cx="380" cy="205" r="62" fill="none" stroke={`url(#g-gold-${variant})`} strokeWidth="3" />
       <circle cx="380" cy="205" r="53" fill="none" stroke="#e6d3a3" strokeWidth="1" />
-      <image href="/logo-mark.png" x="352" y="172" width="56" height="64" preserveAspectRatio="xMidYMid meet" />
+      <image href={LOGO_SRC} x="347" y="172" width="66" height="66" preserveAspectRatio="xMidYMid meet" />
 
       {/* podium */}
       <ellipse cx="380" cy="432" rx="270" ry="30" fill={`url(#g-marble-${variant})`} />
@@ -95,7 +97,7 @@ export function ArchScene({ variant = "hero", className = "" }: { variant?: "her
         <rect x="408" y="262" width="118" height="142" rx="9" fill="#0c3a32" />
         <rect x="408" y="262" width="118" height="142" rx="9" fill="none" stroke={`url(#g-gold-${variant})`} strokeWidth="1.5" opacity="0.8" />
         <path d="M436 262 C436 222 498 222 498 262" fill="none" stroke={`url(#g-gold-${variant})`} strokeWidth="5" strokeLinecap="round" />
-        <image href="/logo-mark.png" x="440" y="296" width="54" height="62" preserveAspectRatio="xMidYMid meet" opacity="0.95" />
+        <image href={LOGO_SRC} x="436" y="294" width="62" height="66" preserveAspectRatio="xMidYMid meet" opacity="0.95" />
         <rect x="438" y="366" width="56" height="3" fill="#c8a96b" opacity="0.7" />
       </g>
 

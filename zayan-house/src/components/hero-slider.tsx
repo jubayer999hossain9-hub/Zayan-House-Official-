@@ -18,7 +18,9 @@ export function HeroSlider({ slides, scene }: { slides: HeroSlide[]; scene: Reac
     return () => clearInterval(t);
   }, [paused, count]);
 
-  const s = slides[index];
+  if (count === 0) return null;
+
+  const s = slides[index] ?? slides[0];
   return (
     <section
       className="relative overflow-hidden bg-gradient-to-br from-[#fbf4e6] via-[#f6ecd7] to-[#eddcba]"
@@ -34,9 +36,9 @@ export function HeroSlider({ slides, scene }: { slides: HeroSlide[]; scene: Reac
           <p className="animate-fade-up flex items-center gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-gold-dark">
             <span className="h-px w-8 bg-gold-dark" aria-hidden /> {s.eyebrow}
           </p>
-          <h1 className="animate-fade-up mt-4 text-5xl leading-[1.04] text-green sm:text-6xl lg:text-7xl">
+          <h2 className="animate-fade-up mt-4 text-5xl leading-[1.04] text-green sm:text-6xl lg:text-7xl">
             {s.title} {s.accent && <span className="accent-italic">{s.accent}</span>}
-          </h1>
+          </h2>
           <p className="animate-fade-up mt-5 max-w-md text-[0.95rem] leading-relaxed text-charcoal/75">{s.text}</p>
           <div className="animate-fade-up mt-7 flex flex-wrap gap-3">
             <Link href={s.link} className="btn btn-primary">{s.button} <ArrowRight size={16} /></Link>
