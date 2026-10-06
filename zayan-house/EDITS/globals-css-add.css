@@ -1,0 +1,26 @@
+/* Kalpurush for all Bengali text.
+   The first two blocks attach Kalpurush to your existing font names for Bengali
+   letters only, so every Bengali word on the site uses it without other changes. */
+@font-face {
+  font-family: "Inter Variable";
+  src: url("/fonts/Kalpurush.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0980-09FF, U+200C-200D;
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("/fonts/Kalpurush.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+0980-09FF, U+200C-200D;
+}
+@font-face {
+  font-family: "Kalpurush";
+  src: url("/fonts/Kalpurush.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+.font-bn {
+  font-family: "Kalpurush", "Inter Variable", sans-serif;
+}

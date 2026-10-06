@@ -147,17 +147,25 @@ export function CheckoutForm({ user, addresses, codInstructions }: Props) {
             </div>
           )}
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="sm:col-span-2">{input("address", "Full address (house, road, area)", { required: true, autoComplete: "street-address" })}</div>
-            {input("area", "Area / thana (optional)")}
-            {input("city", "City / upazila", { required: true, autoComplete: "address-level2" })}
+            
+            {/* ডিস্ট্রিক্ট ড্রপডাউন */}
             <div>
-              <label htmlFor="c-district" className="label">District <span className="text-danger">*</span></label>
+              <label htmlFor="c-district" className="label">District (জেলা) <span className="text-danger">*</span></label>
               <select id="c-district" name="district" value={form.district} onChange={set("district")} aria-invalid={err("district") ? "true" : undefined} className="field">
                 {DISTRICTS.map((d) => <option key={d} value={d}>{d}</option>)}
               </select>
               {err("district") && <p className="field-error">{err("district")}</p>}
             </div>
-            {input("postalCode", "Postal code (optional)")}
+
+            {/* থানা এবং পোস্ট কোড বাধ্যতামূলক ফিল্ড */}
+            {input("city", "Thana / Upazila (থানা / উপজেলা)", { required: true, autoComplete: "address-level2" })}
+            {input("postalCode", "Postal Code (পোস্ট কোড)", { required: true })}
+            
+            {/* সম্পূর্ণ ঠিকানা */}
+            <div className="sm:col-span-2">
+                {input("address", "Village / Area / House (গ্রাম / এলাকা / বাসা)", { required: true, autoComplete: "street-address" })}
+            </div>
+
             <div className="sm:col-span-2">
               <label htmlFor="c-notes" className="label">Order notes (optional)</label>
               <textarea id="c-notes" name="notes" value={form.notes} onChange={set("notes")} rows={3} maxLength={500} className="field" />

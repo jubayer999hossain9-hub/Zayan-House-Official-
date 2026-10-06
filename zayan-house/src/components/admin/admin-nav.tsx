@@ -13,6 +13,7 @@ const NAV = [
   { label: "Coupons", href: "/admin/coupons" },
   { label: "Delivery", href: "/admin/delivery" },
   { label: "Pages", href: "/admin/pages" },
+  { label: "Home Settings", href: "/admin/home" }, // নতুন পেজের লিংক এখানে যুক্ত করা হয়েছে
   { label: "Settings", href: "/admin/settings" },
 ];
 

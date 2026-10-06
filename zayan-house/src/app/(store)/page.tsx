@@ -14,6 +14,10 @@ import { ArchScene } from "@/components/arch-scene";
 import { HeroBanner } from "@/components/hero-banner";
 import { CategoryCard, CollectionTile } from "@/components/category-card";
 
+// নতুন ব্যানার ও ভিডিও কম্পোনেন্ট ইম্পোর্ট করা হলো
+import { HomeBanners } from "@/components/home/HomeBanners";
+import { HomeVideoSlot } from "@/components/home/HomeVideoSlot";
+
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -71,17 +75,25 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd).replace(/</g, "\\u003c") }} />
 
-      {settings.banner.enabled ? (
-        <HeroBanner
-          imageUrl={settings.banner.imageUrl}
-          alt={settings.banner.alt || settings.general.siteName}
-          heading={`${settings.general.siteName}: ${settings.general.tagline}`}
-          buttonLabel={settings.hero.s1Button}
-          buttonLink={settings.hero.s1Link}
-        />
-      ) : (
-        <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
-      )}
+      {/* নতুন ব্যানার সিস্টেম বসানো হলো */}
+      <HomeBanners 
+        fallback={
+          settings.banner.enabled ? (
+            <HeroBanner
+              imageUrl={settings.banner.imageUrl}
+              alt={settings.banner.alt || settings.general.siteName}
+              heading={`${settings.general.siteName}: ${settings.general.tagline}`}
+              buttonLabel={settings.hero.s1Button}
+              buttonLink={settings.hero.s1Link}
+            />
+          ) : (
+            <HeroSlider slides={slides} scene={<ArchScene className="h-full w-full" />} />
+          )
+        } 
+      />
+      
+      {/* ব্যানারের পরের ভিডিও স্লট */}
+      <HomeVideoSlot position="after_banner" />
 
       {categories.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">
@@ -93,6 +105,7 @@ export default async function HomePage() {
           </ul>
         </section>
       )}
+      <HomeVideoSlot position="after_categories" />
 
       {collections.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">
@@ -104,6 +117,7 @@ export default async function HomePage() {
           </ul>
         </section>
       )}
+      <HomeVideoSlot position="after_collections" />
 
       {(newArrivals.items.length > 0 || showPromo) && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">
@@ -126,6 +140,7 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+      <HomeVideoSlot position="after_new_arrivals" />
 
       {featured.items.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">
@@ -133,6 +148,7 @@ export default async function HomePage() {
           <ProductGrid products={featured.items} />
         </section>
       )}
+      <HomeVideoSlot position="after_featured" />
 
       {bestsellers.items.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 pt-14 sm:px-6">
@@ -140,6 +156,7 @@ export default async function HomePage() {
           <ProductGrid products={bestsellers.items} />
         </section>
       )}
+      <HomeVideoSlot position="after_best_sellers" />
 
       {/* Brand story */}
       <section className="mx-auto mt-16 max-w-7xl px-4 sm:px-6">
