@@ -15,6 +15,7 @@ import { HeroBanner } from "@/components/hero-banner";
 import { CategoryCard, CollectionTile } from "@/components/category-card";
 
 import { HomeVideoSlot } from "@/components/home/HomeVideoSlot";
+import { Reviews } from "@/components/home/Reviews";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { alternates: { canonical: "/" } };
@@ -169,17 +170,7 @@ export default async function HomePage() {
       </section>
 
       {testimonials.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
-          <SectionHeading eyebrow="Kind words" title="What our customers say" />
-          <ul className="grid gap-4 md:grid-cols-3">
-            {testimonials.map((t, i) => (
-              <li key={i} className="rounded-2xl bg-white p-6 shadow-card">
-                <p className="font-serif text-xl leading-relaxed text-charcoal">&ldquo;{t.text}&rdquo;</p>
-                <p className="mt-4 text-sm font-semibold text-green">{t.name}{t.city ? `, ${t.city}` : ""}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <Reviews testimonials={testimonials.map((t) => ({ text: t.text, name: t.name, city: t.city }))} />
       )}
 
       <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6">
