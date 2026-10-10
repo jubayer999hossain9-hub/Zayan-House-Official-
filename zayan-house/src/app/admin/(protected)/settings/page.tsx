@@ -3,6 +3,8 @@ import { getSettings } from "@/lib/settings";
 import { getTestimonials } from "@/lib/testimonials";
 import { PageHeader } from "@/components/admin/ui";
 import { SettingsForm, TestimonialsForm } from "@/components/admin/settings-form";
+import { ThemeForm } from "@/components/admin/theme-form";
+import { ZAYAN_CLASSIC, type ThemeValues } from "@/lib/theme";
 
 export const metadata: Metadata = { title: "Settings" };
 export const dynamic = "force-dynamic";
@@ -12,6 +14,15 @@ export default async function AdminSettings() {
   return (
     <div>
       <PageHeader title="Settings" subtitle="Changes appear on the website straight away." />
+      <nav aria-label="Settings sections" className="sticky top-0 z-30 -mx-1 mb-6 flex flex-wrap gap-2 bg-ivory/95 px-1 py-2 backdrop-blur">
+        {[["#theme", "Theme and design"], ["#homepage", "Homepage"], ["#shop", "Shop details"], ["#orders", "Payment and orders"]].map(([href, label]) => (
+          <a key={href} href={href} className="border border-line bg-cream px-3 py-1.5 text-sm text-green hover:border-green" style={{ borderRadius: 999 }}>{label}</a>
+        ))}
+      </nav>
+      <section id="theme" className="mb-8 scroll-mt-20">
+        <ThemeForm initial={{ ...ZAYAN_CLASSIC, ...s.theme } as ThemeValues} />
+      </section>
+      <div id="homepage" className="scroll-mt-20" />
       <div className="mb-6">
         <SettingsForm group="banner" title="Homepage top banner" description="The big picture at the very top of the homepage. Leave the photo empty to use the built-in Zayan House showcase picture. Untick the box to show the 3-slide slider instead." values={s.banner}
           fields={[
@@ -33,7 +44,7 @@ export default async function AdminSettings() {
             { name: `s${n}Link`, label: `Slide ${n}: button link`, hint: "Start with / for a page in your shop, e.g. /shop?new=1" },
           ])} />
       </div>
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div id="shop" className="grid scroll-mt-20 gap-6 lg:grid-cols-2">
         <SettingsForm group="whatsapp" title="WhatsApp" description="Used by the floating WhatsApp button and the footer link." values={s.whatsapp}
           fields={[{ name: "number", label: "WhatsApp number", hint: "Country code first, digits only. Example: 8801XXXXXXXXX. Leave empty to hide the button." }, { name: "message", label: "Pre-filled message", kind: "textarea" }]} />
         <SettingsForm group="announcement" title="Announcement bar" description="The thin green bar at the very top of every page." values={s.announcement}
@@ -42,6 +53,7 @@ export default async function AdminSettings() {
           fields={[{ name: "siteName", label: "Shop name" }, { name: "tagline", label: "Tagline" }, { name: "contactEmail", label: "Contact email" }, { name: "contactPhone", label: "Contact phone" }, { name: "address", label: "Address" }]} />
         <SettingsForm group="social" title="Social links" values={s.social}
           fields={[{ name: "facebook", label: "Facebook page link", hint: "Full link starting with https://" }, { name: "instagram", label: "Instagram link", hint: "Full link starting with https://" }]} />
+        <div id="orders" className="scroll-mt-20 lg:col-span-2" />
         <SettingsForm group="payment" title="Payment" description="Cash on Delivery is the only payment method right now." values={s.payment}
           fields={[{ name: "codEnabled", label: "Accept orders with Cash on Delivery (turn off to pause ordering)", kind: "checkbox" }, { name: "codInstructions", label: "Instructions shown at checkout", kind: "textarea" }]} />
         <SettingsForm group="orders" title="Orders" values={s.orders}

@@ -62,6 +62,24 @@ export const SETTING_DEFAULTS = {
     button: "Shop Party Wear",
     link: "/category/party-wear",
   },
+  theme: {
+    green: "#0f3d35",
+    greenDark: "#0a2b25",
+    greenLight: "#17584d",
+    gold: "#c8a96b",
+    goldDark: "#a98a4d",
+    goldLight: "#e6d3a3",
+    ivory: "#f8f5ee",
+    cream: "#fcfaf5",
+    sand: "#efe6d3",
+    charcoal: "#17201e",
+    muted: "#6f746f",
+    line: "#e6dfd0",
+    headingFont: "cormorant",
+    bodyFont: "inter",
+    buttonStyle: "pill",
+    cardStyle: "soft",
+  },
 } as const;
 
 export type SettingKey = keyof typeof SETTING_DEFAULTS;

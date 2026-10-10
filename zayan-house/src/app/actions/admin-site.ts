@@ -8,6 +8,7 @@ import { settings, deliveryZones, categories } from "@/db/schema";
 import { adminOnly, flashRedirect, uniqueViolation } from "@/lib/admin-form";
 import { slugify } from "@/lib/slug";
 import { zodFieldErrors, type FormState } from "@/lib/validation";
+import { HEX, HEADING_FONT_IDS, BODY_FONT_IDS, BUTTON_STYLE_IDS, CARD_STYLE_IDS } from "@/lib/theme";
 
 /* ---------------- Settings ---------------- */
 const emptyToNull = (max: number) => z.string().trim().max(max);
@@ -23,6 +24,14 @@ for (const n of [1, 2, 3]) {
   heroShape[`s${n}Button`] = z.string().trim().max(30);
   heroShape[`s${n}Link`] = internalOrHttpsLink;
 }
+
+const hexColor = z.string().trim().regex(HEX, "Pick a colour (example: #0f3d35)").transform((v) => v.toLowerCase());
+const themeShape: Record<string, z.ZodTypeAny> = {};
+for (const key of ["green", "greenDark", "greenLight", "gold", "goldDark", "goldLight", "ivory", "cream", "sand", "charcoal", "muted", "line"]) themeShape[key] = hexColor;
+themeShape.headingFont = z.enum(HEADING_FONT_IDS, { message: "Choose a heading font from the list" });
+themeShape.bodyFont = z.enum(BODY_FONT_IDS, { message: "Choose a text font from the list" });
+themeShape.buttonStyle = z.enum(BUTTON_STYLE_IDS, { message: "Choose a button style from the list" });
+themeShape.cardStyle = z.enum(CARD_STYLE_IDS, { message: "Choose a corner style from the list" });
 
 const GROUPS = {
   general: z.object({
@@ -46,6 +55,7 @@ const GROUPS = {
     alt: z.string().trim().max(160),
   }),
   hero: z.object(heroShape),
+  theme: z.object(themeShape),
   promo: z.object({
     enabled: z.boolean(), eyebrow: z.string().trim().max(60), title: z.string().trim().max(80),
     text: z.string().trim().max(160), button: z.string().trim().max(30), link: internalOrHttpsLink,
