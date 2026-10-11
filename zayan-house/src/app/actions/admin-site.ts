@@ -171,3 +171,27 @@ export async function deleteCategory(formData: FormData) {
   revalidatePath("/", "layout");
   flashRedirect("/admin/categories", "ok", n > 0 ? `Category deleted. ${n} product${n === 1 ? " is" : "s are"} now without a category.` : "Category deleted.");
 }
+
+/** Adds a category with just a name (used by the "Add new category" box inside the product form). */
+export async function quickAddCategory(name: string): Promise<{ ok: true; id: number; name: string } | { ok: false; error: string }> {
+  await adminOnly();
+  const clean = String(name ?? "").trim().replace(/\s+/g, " ");
+  if (clean.length < 2 || clean.length > 80) return { ok: false, error: "Enter a category name (2 to 80 characters)." };
+  const exists = await db.select({ id: categories.id }).from(categories).where(sql`lower(${categories.name}) = ${clean.toLowerCase()}`).limit(1);
+  if (exists.length > 0) return { ok: false, error: "A category with this name already exists. Pick it from the list." };
+  const [{ m }] = await db.select({ m: sql<number>`coalesce(max(${categories.displayOrder}), 0)::int`.mapWith(Number) }).from(categories);
+  const base = slugify(clean) || `category-${Date.now().toString(36)}`;
+  for (let i = 0; i < 6; i++) {
+    const slug = i === 0 ? base : `${base}-${i + 1}`;
+    try {
+      const [row] = await db.insert(categories).values({ name: clean, slug, displayOrder: m + 1, isActive: true }).returning({ id: categories.id, name: categories.name });
+      revalidatePath("/", "layout");
+      return { ok: true, id: row.id, name: row.name };
+    } catch (error) {
+      if (uniqueViolation(error)) continue;
+      console.error("quickAddCategory failed:", error);
+      return { ok: false, error: "Could not add the category. Try again." };
+    }
+  }
+  return { ok: false, error: "Could not create a web address for this name. Try a slightly different name." };
+}

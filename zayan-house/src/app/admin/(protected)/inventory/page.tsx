@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PILL_BASE, TONES } from "@/lib/status-tones";
 import Link from "next/link";
 import { sql } from "drizzle-orm";
 import { db } from "@/db";
@@ -56,13 +57,13 @@ export default async function InventoryPage({ searchParams }: { searchParams: Pr
           <thead><tr><th className={th}>Product</th><th className={th}>Variant</th><th className={th}>SKU</th><th className={th}>Level</th><th className={th}>Stock</th></tr></thead>
           <tbody>
             {rows.map((r) => {
-              const level = r.stock <= 0 ? ["Out of stock", "bg-danger/10 text-danger"] : r.stock <= low ? ["Low", "bg-gold/20 text-gold-dark"] : ["OK", "bg-success/15 text-success"];
+              const level = r.stock <= 0 ? ["Out of stock", TONES.red] : r.stock <= low ? ["Low", TONES.orange] : ["OK", TONES.green];
               return (
                 <tr key={`${r.kind}-${r.id}`} className="hover:bg-ivory">
                   <td className={td}><Link href={`/admin/products/${r.product_id}`} className="font-medium text-green underline">{r.product}</Link>{!r.active && <span className="ml-2 text-xs text-muted">(hidden)</span>}</td>
                   <td className={td}>{r.variant || "-"}</td>
                   <td className={td}>{r.sku}</td>
-                  <td className={td}><span className={`px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider ${level[1]}`}>{level[0]}</span></td>
+                  <td className={td}><span className={`${PILL_BASE} ${level[1]}`}>{level[0]}</span></td>
                   <td className={td}>
                     <form action={setStock} className="flex items-center gap-2">
                       <input type="hidden" name="kind" value={r.kind} /><input type="hidden" name="id" value={r.id} /><input type="hidden" name="back" value={here} />

@@ -6,8 +6,20 @@ import { orders, customers } from "@/db/schema";
 import { getSettings } from "@/lib/settings";
 import { formatPrice } from "@/lib/format";
 import { formatDate } from "@/lib/order-display";
-import { Card, TableWrap, th, td } from "@/components/admin/ui";
+import { Banknote, CalendarDays, ShoppingBag, Clock, Truck, CheckCircle2, XCircle, Users, AlertTriangle } from "lucide-react";
+import { Card, PageHeader, TableWrap, th, td } from "@/components/admin/ui";
 import { StatusBadge } from "@/components/status-badge";
+
+const CARD_TONES = {
+  green: { bar: "border-t-emerald-500", chip: "bg-emerald-100 text-emerald-700" },
+  gold: { bar: "border-t-amber-400", chip: "bg-amber-100 text-amber-700" },
+  blue: { bar: "border-t-blue-500", chip: "bg-blue-100 text-blue-700" },
+  amber: { bar: "border-t-orange-400", chip: "bg-orange-100 text-orange-700" },
+  violet: { bar: "border-t-violet-500", chip: "bg-violet-100 text-violet-700" },
+  teal: { bar: "border-t-teal-500", chip: "bg-teal-100 text-teal-700" },
+  red: { bar: "border-t-rose-500", chip: "bg-rose-100 text-rose-700" },
+  pink: { bar: "border-t-pink-500", chip: "bg-pink-100 text-pink-700" },
+} as const;
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
@@ -44,38 +56,46 @@ export default async function AdminDashboard() {
   const max = Math.max(1, ...series.map((s) => s.sales));
   const week = series.slice(-7).reduce((s, d) => s + d.sales, 0);
 
-  const cards = [
-    { label: "Total sales", value: formatPrice(o.sales), href: "/admin/orders", note: "Cancelled orders not counted" },
-    { label: "Sales today", value: formatPrice(o.today), href: "/admin/orders" },
-    { label: "Total orders", value: String(o.total), href: "/admin/orders" },
-    { label: "Pending orders", value: String(o.pending), href: "/admin/orders?status=pending", alert: o.pending > 0 },
-    { label: "In progress", value: String(o.processing), href: "/admin/orders?status=processing", note: "Confirmed, processing, shipped" },
-    { label: "Delivered", value: String(o.delivered), href: "/admin/orders?status=delivered" },
-    { label: "Cancelled", value: String(o.cancelled), href: "/admin/orders?status=cancelled" },
-    { label: "Customers", value: String(c.total), href: "/admin/customers" },
-    { label: "Low / out of stock", value: String(lowCount), href: "/admin/inventory?filter=low", alert: lowCount > 0, note: `${low} or fewer in stock` },
+  const cards: { label: string; value: string; href: string; note?: string; alert?: boolean; tone: keyof typeof CARD_TONES; Icon: typeof Banknote }[] = [
+    { label: "Total sales", value: formatPrice(o.sales), href: "/admin/orders", note: "Cancelled orders not counted", tone: "green", Icon: Banknote },
+    { label: "Sales today", value: formatPrice(o.today), href: "/admin/orders", tone: "gold", Icon: CalendarDays },
+    { label: "Total orders", value: String(o.total), href: "/admin/orders", tone: "blue", Icon: ShoppingBag },
+    { label: "Pending orders", value: String(o.pending), href: "/admin/orders?status=pending", alert: o.pending > 0, tone: "amber", Icon: Clock },
+    { label: "In progress", value: String(o.processing), href: "/admin/orders?status=processing", note: "Confirmed, processing, shipped", tone: "violet", Icon: Truck },
+    { label: "Delivered", value: String(o.delivered), href: "/admin/orders?status=delivered", tone: "teal", Icon: CheckCircle2 },
+    { label: "Cancelled", value: String(o.cancelled), href: "/admin/orders?status=cancelled", tone: "red", Icon: XCircle },
+    { label: "Customers", value: String(c.total), href: "/admin/customers", tone: "pink", Icon: Users },
+    { label: "Low / out of stock", value: String(lowCount), href: "/admin/inventory?filter=low", alert: lowCount > 0, note: `${low} or fewer in stock`, tone: "amber", Icon: AlertTriangle },
   ];
 
   return (
     <div>
-      <h1 className="text-3xl text-green">Dashboard</h1>
-      <p className="mt-1 text-sm text-muted">Live numbers from your database.</p>
+      <PageHeader title="Dashboard" subtitle="Live numbers from your database." />
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {cards.map((k) => (
-          <Link key={k.label} href={k.href} className={`border bg-cream p-5 transition-shadow hover:shadow-soft ${k.alert ? "border-gold" : "border-line"}`}>
-            <p className="text-xs uppercase tracking-[0.14em] text-muted">{k.label}</p>
-            <p className="mt-2 font-serif text-3xl text-green">{k.value}</p>
-            {k.note && <p className="mt-1 text-xs text-muted">{k.note}</p>}
-          </Link>
-        ))}
+        {cards.map((k) => {
+          const t = CARD_TONES[k.tone];
+          return (
+            <Link key={k.label} href={k.href} className={`group border border-line border-t-4 bg-cream p-5 transition hover:-translate-y-0.5 hover:shadow-soft ${t.bar}`}>
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-[0.14em] text-muted">{k.label}</p>
+                  <p className="mt-2 font-serif text-3xl text-green">{k.value}</p>
+                  {k.note && <p className="mt-1 text-xs text-muted">{k.note}</p>}
+                </div>
+                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${t.chip}`}><k.Icon size={22} strokeWidth={1.75} aria-hidden /></span>
+              </div>
+              {k.alert && <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-[0.66rem] font-semibold uppercase tracking-wider text-amber-800 ring-1 ring-inset ring-amber-300/60 before:h-1.5 before:w-1.5 before:animate-pulse before:rounded-full before:bg-current">Needs attention</span>}
+            </Link>
+          );
+        })}
       </div>
 
       <Card title="Sales, last 14 days" className="mt-6">
         <p className="mb-4 text-sm text-muted">Last 7 days: <strong className="text-green">{formatPrice(week)}</strong></p>
         <div className="flex h-40 items-end gap-1.5" role="img" aria-label="Daily sales for the last 14 days">
-          {series.map((d) => (
+          {series.map((d, idx) => (
             <div key={d.day} className="group relative flex h-full flex-1 flex-col justify-end">
-              <div className="w-full bg-green transition-colors group-hover:bg-gold" style={{ height: `${Math.max(d.sales > 0 ? 4 : 1, (d.sales / max) * 100)}%`, opacity: d.sales > 0 ? 1 : 0.25 }} />
+              <div className={`w-full rounded-t-md transition-colors group-hover:bg-gold ${idx === series.length - 1 ? "bg-gold" : "bg-green"}`} style={{ height: `${Math.max(d.sales > 0 ? 4 : 1, (d.sales / max) * 100)}%`, opacity: d.sales > 0 ? 1 : 0.25 }} />
               <span className="pointer-events-none absolute -top-7 left-1/2 z-10 hidden -translate-x-1/2 whitespace-nowrap bg-charcoal px-2 py-1 text-[0.65rem] text-cream group-hover:block">{d.day.slice(5)}: {formatPrice(d.sales)}</span>
             </div>
           ))}

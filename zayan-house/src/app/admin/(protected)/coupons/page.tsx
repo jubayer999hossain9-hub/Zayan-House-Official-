@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PILL_BASE, TONES } from "@/lib/status-tones";
 import Link from "next/link";
 import { desc } from "drizzle-orm";
 import { db } from "@/db";
@@ -27,7 +28,7 @@ export default async function AdminCoupons({ searchParams }: { searchParams: Pro
             {rows.map((c) => {
               const expired = !!c.expiresAt && c.expiresAt < now;
               const notYet = !!c.startsAt && c.startsAt > now;
-              const status = !c.isActive ? ["Inactive", "bg-muted/15 text-muted"] : expired ? ["Expired", "bg-danger/10 text-danger"] : notYet ? ["Scheduled", "bg-gold/20 text-gold-dark"] : ["Live", "bg-success/15 text-success"];
+              const status = !c.isActive ? ["Inactive", TONES.gray] : expired ? ["Expired", TONES.red] : notYet ? ["Scheduled", TONES.blue] : ["Live", TONES.green];
               return (
                 <tr key={c.id}>
                   <td className={td}><Link href={`/admin/coupons/${c.id}`} className="font-semibold text-green underline">{c.code}</Link>{c.description && <span className="block text-xs text-muted">{c.description}</span>}</td>
@@ -38,7 +39,7 @@ export default async function AdminCoupons({ searchParams }: { searchParams: Pro
                     {c.perCustomerLimit && <span className="block">{c.perCustomerLimit} per customer</span>}
                   </td>
                   <td className={td}>{c.usedCount}{c.usageLimit ? ` / ${c.usageLimit}` : ""}</td>
-                  <td className={td}><span className={`px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider ${status[1]}`}>{status[0]}</span></td>
+                  <td className={td}><span className={`${PILL_BASE} ${status[1]}`}>{status[0]}</span></td>
                   <td className={td}>
                     <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider">
                       <form action={toggleCoupon}><input type="hidden" name="id" value={c.id} /><button type="submit" className="text-green underline">{c.isActive ? "Deactivate" : "Activate"}</button></form>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PILL_BASE, TONES } from "@/lib/status-tones";
 import Link from "next/link";
 import { and, count, desc, eq, ilike, or, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
@@ -46,7 +47,7 @@ export default async function AdminProducts({ searchParams }: { searchParams: Pr
       .offset((page - 1) * PAGE_SIZE),
   ]);
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-  const statusColor: Record<string, string> = { active: "bg-success/15 text-success", draft: "bg-gold/20 text-gold-dark", archived: "bg-muted/15 text-muted" };
+  const statusColor: Record<string, string> = { active: TONES.green, draft: TONES.amber, archived: TONES.gray };
 
   return (
     <div>
@@ -79,7 +80,7 @@ export default async function AdminProducts({ searchParams }: { searchParams: Pr
                   <td className={td}>{r.category ?? "-"}</td>
                   <td className={td}>{r.salePrice != null ? <><span className="font-semibold">{formatPrice(r.salePrice)}</span> <span className="text-xs text-muted line-through">{formatPrice(r.regularPrice)}</span></> : formatPrice(r.regularPrice)}</td>
                   <td className={td}><span className={stock <= 0 ? "font-semibold text-danger" : ""}>{stock}</span>{r.variantCount > 0 && <span className="text-xs text-muted"> ({r.variantCount} variants)</span>}</td>
-                  <td className={td}><span className={`px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wider ${statusColor[r.status]}`}>{r.status}</span></td>
+                  <td className={td}><span className={`${PILL_BASE} ${statusColor[r.status]}`}>{r.status}</span></td>
                 </tr>
               );
             })}

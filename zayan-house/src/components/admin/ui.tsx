@@ -2,10 +2,11 @@ import Link from "next/link";
 
 export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
   return (
-    <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+    <div className="mb-7 flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 className="text-3xl text-green">{title}</h1>
-        {subtitle && <p className="mt-1 text-sm text-muted">{subtitle}</p>}
+        <h1 className="text-3xl text-green sm:text-4xl">{title}</h1>
+        <span aria-hidden className="mt-2 block h-[3px] w-12 rounded-full bg-gold" />
+        {subtitle && <p className="mt-2.5 text-sm text-muted">{subtitle}</p>}
       </div>
       {action}
     </div>

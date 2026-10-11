@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { saveProduct } from "@/app/actions/admin-products";
+import { quickAddCategory } from "@/app/actions/admin-site";
 import { useFormAction } from "@/lib/use-form-action";
 import { slugify } from "@/lib/slug";
 
@@ -26,6 +27,22 @@ export function ProductForm({ initial, variants: initialVariants, categories }: 
   const [v, setV] = useState(initial);
   const [rows, setRows] = useState<VariantRow[]>(initialVariants);
   const [slugTouched, setSlugTouched] = useState(!!initial.id);
+  const [cats, setCats] = useState(categories);
+  const [addingCat, setAddingCat] = useState(false);
+  const [newCat, setNewCat] = useState("");
+  const [catError, setCatError] = useState("");
+  const [catPending, startCat] = useTransition();
+  const addCategory = () => {
+    setCatError("");
+    startCat(async () => {
+      const r = await quickAddCategory(newCat);
+      if (!r.ok) { setCatError(r.error); return; }
+      setCats((c) => [...c, { id: r.id, name: r.name }]);
+      setV((x) => ({ ...x, categoryId: r.id }));
+      setNewCat("");
+      setAddingCat(false);
+    });
+  };
   const err = (k: string) => state.fieldErrors?.[k];
   const set = <K extends keyof ProductValues>(k: K, val: ProductValues[K]) => setV((p) => ({ ...p, [k]: val }));
 
@@ -61,8 +78,24 @@ export function ProductForm({ initial, variants: initialVariants, categories }: 
           <label htmlFor="pf-categoryId" className="label">Category</label>
           <select id="pf-categoryId" name="categoryId" value={v.categoryId ?? ""} onChange={(e) => set("categoryId", e.target.value ? Number(e.target.value) : null)} className="field">
             <option value="">No category</option>
-            {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {cats.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
+          {!addingCat ? (
+            <button type="button" onClick={() => setAddingCat(true)} className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-green underline"><Plus size={14} /> Add new category</button>
+          ) : (
+            <div className="mt-2 space-y-2 border border-line bg-ivory p-3">
+              <label htmlFor="pf-newcat" className="label">New category name</label>
+              <input id="pf-newcat" value={newCat} onChange={(e) => { setNewCat(e.target.value); setCatError(""); }}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addCategory(); } }}
+                placeholder="Example: Watches" maxLength={80} className="field" aria-invalid={catError ? "true" : undefined} />
+              {catError && <p className="field-error" role="alert">{catError}</p>}
+              <div className="flex gap-2">
+                <button type="button" onClick={addCategory} disabled={catPending} className="btn btn-primary !px-4 !py-2">{catPending ? "Adding…" : "Add category"}</button>
+                <button type="button" onClick={() => { setAddingCat(false); setNewCat(""); setCatError(""); }} className="btn btn-outline !px-4 !py-2">Cancel</button>
+              </div>
+              <p className="text-xs text-muted">It is saved straight away and selected for this product. You can add a photo or change its order later in Categories.</p>
+            </div>
+          )}
         </div>
         <div>
           <label htmlFor="pf-status" className="label">Status</label>
